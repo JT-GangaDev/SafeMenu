@@ -1,0 +1,78 @@
+DOCUMENTO DE ESPECIFICACIONES TÉCNICAS (DET)Proyecto: Gestor de Menús QR Inteligentes con Detección Automática de AlérgenosArquitectura: SaaS Multi-inquilino (Multi-tenant) de Base de Datos Única1. Stack Tecnológico RecomendadoPara maximizar la velocidad de desarrollo y evitar configurar servidores complejos desde cero, utilizaremos servicios gestionados (Serverless/Backend-as-a-Service).Front-end (Panel del Hostelero y Menú QR): Next.js o React con Tailwind CSS. Tailwind te resolverá la "web preciosa" con componentes nativos listos para móvil.Back-end y API: Node.js (Express) o las propias Serverless Routes de Next.js.Base de Datos y Autenticación: Supabase o Firebase. Se recomienda Supabase (PostgreSQL) por su facilidad para manejar relaciones de datos complejas (Restaurante ➔ Categorías ➔ Platos).Procesamiento de IA: API de OpenAI (Modelo: gpt-4o-mini, por ser ultra rápido, económico y compatible con salidas estructuradas JSON).Generación de QR: Librería de Node.js qrcode o canvas (generación sobre la marcha en formato SVG/PNG).2. Arquitectura de la Base de Datos (Esquema Relacional)Necesitas un modelo relacional de tres niveles. Aquí tienes la estructura exacta para tu base de datos:sql-- 1. Tabla de Restaurantes (Inquilinos)
+CREATE TABLE restaurantes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL, -- Ej: 'pizzeria-mario' para la URL
+    email VARCHAR(150) UNIQUE NOT NULL,
+    logo_url TEXT,
+    color_principal VARCHAR(7) DEFAULT '#FF5733', -- Almacena el código HEX de su marca
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 2. Tabla de Categorías (Para organizar la carta)
+CREATE TABLE categorias (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    restaurante_id UUID REFERENCES restaurantes(id) ON DELETE CASCADE,
+    nombre VARCHAR(50) NOT NULL, -- Ej: 'Entrantes', 'Pizzas'
+    orden INT DEFAULT 0
+);
+
+-- 3. Tabla de Platos y Alérgenos
+CREATE TABLE platos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    categoria_id UUID REFERENCES categorias(id) ON DELETE CASCADE,
+    restaurante_id UUID REFERENCES restaurantes(id) ON DELETE CASCADE,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    -- Alérgenos (Estructura de flags booleanos)
+    contiene_gluten BOOLEAN DEFAULT FALSE,
+    contiene_lacteos BOOLEAN DEFAULT FALSE,
+    contiene_pescado BOOLEAN DEFAULT FALSE,
+    contiene_cacahuetes BOOLEAN DEFAULT FALSE,
+    contiene_frutos_secos BOOLEAN DEFAULT FALSE,
+    contiene_soja BOOLEAN DEFAULT FALSE,
+    -- (Añadir el resto de los 14 alérgenos obligatorios aquí)
+    created_at TIMESTAMP DEFAULT NOW()
+);
+Usa el código con precaución.3. Lógica del Núcleo: Integración con la IA (OpenAI)Cuando el hostelero añade o edita la descripción de un plato, tu Back-end intercepta el texto y ejecuta la siguiente función para obtener los alérgenos sin margen de error en el formato.Configuración del Prompt Técnico:javascriptconst obtenerAlergenosPorIA = async (descripcionPlato) => {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "system",
+        content: `Eres un asistente experto en seguridad alimentaria y nutrición. Tu única tarea es analizar descripciones de platos de restaurantes e identificar la presencia de alérgenos según la normativa europea.
+        Debes evaluar estrictamente los siguientes 6 alérgenos clave: gluten, lacteos, pescado, cacahuetes, frutos_secos, soja.
+        Devuelve OBLIGATORIAMENTE un objeto JSON con los nombres de los alérgenos en minúscula como llaves y un valor booleano (true/false). No incluyas texto de introducción ni explicaciones adicionales.`
+      },
+      {
+        role: "user",
+        content: Plato a analizar: "${descripcionPlato}"
+      }
+    ],
+    // Forzamos a la IA a responder en formato JSON estricto
+    response_format: { type: "json_object" }
+  });
+
+  return JSON.parse(response.choices[0].message.content);
+};
+Usa el código con precaución.4. Flujo de Enrutamiento y URLs DinámicasPara evitar crear múltiples servidores, tu Front-end utilizará Rutas Dinámicas (Dynamic Routing).Ruta del Panel de Control (Privada): ://tudominio.comEl hostelero inicia sesión y gestiona sus platos.Ruta del Menú QR (Pública): ://tudominio.com[slug]Funcionamiento: Cuando un cliente escanea el QR en la mesa, accede a ://tudominio.com.Tu código de Front-end captura el parámetro slug (pizzeria-mario).Realiza una petición a tu API: GET /api/menu?slug=pizzeria-mario.La API busca en la base de datos el restaurante con ese slug, extrae sus colores, su logotipo y sus platos asociados, y renderiza la pantalla al instante.5. El Generador de Códigos QRNo necesitas servicios externos de pago para generar los QR. En tu panel de control, incluyes un botón que ejecuta esta función utilizando la librería qrcode en Node.js:javascriptimport QRCode from 'qrcode';
+
+const generarCodigoQR = async (slug) => {
+  const urlMenu = https://tudominio.com{slug};
+  try {
+    // Genera una imagen en Base64 para mostrar directamente en la etiqueta <img src="...">
+    const qrBase64 = await QRCode.toDataURL(urlMenu, {
+      width: 400,
+      margin: 2,
+      color: {
+        dark: '#000000',  // Color del QR
+        light: '#FFFFFF'  // Fondo
+      }
+    });
+    return qrBase64;
+  } catch (err) {
+    console.error(err);
+  }
+};
+Usa el código con precaución.El hostelero se descarga esta imagen, la imprime y la pega en sus mesas. Si el hostelero cambia los platos de la carta por la tarde, el código QR sigue siendo exactamente el mismo, porque la URL no cambia, solo cambian los datos que devuelve tu base de datos.

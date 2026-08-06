@@ -1,0 +1,7 @@
+El Generador de Menús QR con Alérgenos por IA (Idea 2)El núcleo de esta app no es el diseño del menú (que se hace con plantillas CSS bonitas), sino el motor de detección automática. El flujo técnico sería el siguiente:El Input del Cliente: El hostelero rellena un formulario web simple con el nombre del plato y la descripción.Ejemplo: "Tarta de queso casera con base de galleta Lotus y mermelada de arándanos".El Script de Extracción (Back-end): Envías esa descripción a la API de OpenAI (usando un modelo rápido y barato como gpt-4o-mini). El secreto aquí es el Prompting y el formato de respuesta (Structured Outputs). Le pides a la IA que te devuelva obligatoriamente un formato JSON estricto basándose en los 14 alérgenos de la ley.Tu Prompt interno detrás de la app: "Analiza la siguiente descripción de un plato y determina cuáles de los 14 alérgenos oficiales contiene. Devuelve ÚNICAMENTE un objeto JSON con valores booleanos (true/false) para cada alérgeno. No añadas texto explicativo."La Respuesta Técnica: La IA te devolverá algo limpio como esto:json{
+  "gluten": true, 
+  "lacteos": true, 
+  "frutos_secos": false,
+  "pescado": false
+}
+Usa el código con precaución.Guardado y Renderizado: Guardas ese JSON en tu base de datos (PostgreSQL/Supabase) vinculado a ese plato. En el front-end de la web que verá el cliente final (el menú móvil), tu código lee ese JSON y, si gluten es true, renderiza automáticamente el icono de la espiga de trigo.
