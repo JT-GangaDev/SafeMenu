@@ -27,6 +27,8 @@ Menús con alérgenos detectados por IA y publicados mediante un código QR.
 
 - `npm run test` usa dos proyectos de Vitest: `dominio` (Node) y `componentes`
   (jsdom con Testing Library).
+- `pruebas/dobles/` contiene los proveedores falsos de IA, QR, correo y tiempo,
+  para que ninguna prueba llame a un servicio real.
 - `npm run test:e2e` compila la aplicación, la arranca con `npm run start` y
   comprueba la portada con Playwright y axe. Necesita el Chromium de Playwright
   (`npx playwright install chromium`); si no se puede descargar, ejecuta

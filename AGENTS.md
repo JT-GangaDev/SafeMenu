@@ -86,13 +86,33 @@ pruebas/        Pruebas de dominio, integración, componentes y E2E
   hay una carpeta que el plan no declara, si falta el `README.md` de una carpeta
   o si `dominio/` o `infraestructura/` importan lo que les corresponde a otras
   capas.
-- Las 21 carpetas de `dominio/`, `infraestructura/` y `pruebas/` llevan un
+- Las 22 carpetas de `dominio/`, `infraestructura/` y `pruebas/` llevan un
   `README.md` en español con su responsabilidad. Es lo que permite versionar
   carpetas que aún no tienen archivos.
 - Las rutas de `app/` no se adelantan: cada una se crea en la tarea que la
   implemente. `dominio/` no importa `infraestructura/`, y este no importa `app/`.
 - Al crear una carpeta, declara antes su responsabilidad en `docs/plan.md` §3 y
   después añade su `README.md`; el plan y el disco se vigilan en ambos sentidos.
+
+## Dobles de prueba (T-006)
+
+- `pruebas/dobles/` sustituye a OpenAI, al QR y a SMTP, y controla el tiempo. Las
+  pruebas de T-022, T-038 y T-047 los usan; ninguno llama a un servicio real.
+- El doble de IA entrega el **texto crudo** de la respuesta, no un objeto
+  parseado: una clave repetida desaparece en `JSON.parse` y `CA-RF6-03` exige
+  rechazarla. Los escenarios van en `ESCENARIOS_IA` (`pruebas/dobles/ia.ts`).
+- Los nombres de los campos externos y la tabla que los traduce a códigos del
+  dominio están solo en `pruebas/dobles/contrato.ts`. T-031 ajustará ese archivo
+  al DTO definitivo; `contrato.test.ts` falla si deja de ser una correspondencia
+  uno a uno con los 14 códigos.
+- El tiempo de espera de 10 segundos y la caducidad de sesión se prueban con el
+  puerto `Reloj` de `contrato.ts`, no con `vi.useFakeTimers()`: el código de
+  producción recibe el reloj por parámetro (T-020 y T-032).
+- No añadas dependencias para esto: el PNG válido va incrustado en `qr.ts` y
+  `pruebas/fundacion/dependencias.test.ts` exige la lista exacta de
+  `devDependencies`.
+- El doble de repositorio de Supabase se añade con T-011 a T-016, cuando exista
+  el contrato al que conectarse.
 
 ## Vocabulario del dominio (T-004)
 

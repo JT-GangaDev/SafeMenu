@@ -66,6 +66,7 @@ pruebas/
   tipos/                 Declaraciones de tipos de terceros
   entorno/               Variables de entorno y secretos de servidor
   dominio/               Reglas del dominio sin renderizar interfaz
+  dobles/                Proveedores de prueba falsos de IA, QR, correo y tiempo
   integracion/           Adaptadores, base de datos y correo
   componentes/           Componentes y accesibilidad, con sus fixtures
   e2e/                   Flujos completos en el navegador
@@ -349,7 +350,12 @@ Cada función de dominio tendrá al menos un caso de éxito, uno de error y uno 
 - Creación atómica de instantáneas.
 - Respaldo de la última instantánea pública confirmada.
 - Recuperación de contraseña y revocación de sesiones.
-- Proveedores simulados de QR y correo.
+- Proveedores simulados de QR, correo, IA y tiempo, en `pruebas/dobles/`. El
+  doble de IA entrega el texto crudo de la respuesta, porque una clave repetida
+  no sobrevive a `JSON.parse` y `CA-RF6-03` exige rechazarla. Los nombres de los
+  campos externos están centralizados en `pruebas/dobles/contrato.ts` y se
+  alinearán con el DTO definitivo en T-031. El doble de repositorio llegará con
+  los puertos de T-011 a T-016.
 
 ### 9.4 Pruebas de componentes y accesibilidad
 
@@ -397,7 +403,7 @@ renderizar interfaz. **RNF-9, RNF-10**.
 - **RNF-1:** la persistencia se hará después de validar el conjunto exacto de 14 alérgenos; los resultados inválidos no se guardarán como verificación.
 - **RNF-2:** contraseñas, sesiones y credenciales будут gestionados por el proveedor de autenticación y nunca se expondrán en registros.
 - **RNF-3:** la vista pública solo leerá instantáneas publicadas.
-- **RNF-4:** la UI, documentación, errores y nombres visibles estarán en español; el DTO de OpenAI vivirá solo en infraestructura.
+- **RNF-4:** la UI, documentación, errores y nombres visibles estarán en español; el DTO de OpenAI vivirá solo en `infraestructura/openai/` y en los dobles de prueba de `pruebas/dobles/`, que no se compilan para producción.
 - **RNF-5:** iconos, advertencias y acciones tendrán texto y operación accesible.
 - **RNF-6:** se medirá el primer contenido visible con datos representativos.
 - **RNF-7:** se monitorizará la disponibilidad desde fuera y se distinguirán errores técnicos de estados administrativos.

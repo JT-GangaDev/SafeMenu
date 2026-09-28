@@ -43,10 +43,11 @@
   - Hecho cuando: el dominio no importa componentes visuales y las carpetas de `dominio`, `infraestructura` y `pruebas` están creadas.
   - Verificado: 21 carpetas declaradas en `docs/plan.md` §3 y existentes en disco, cada una con su `README.md` en español. `pruebas/fundacion/capas.test.ts` (11 pruebas) compara el árbol del plan con el disco en ambos sentidos, exige el `README.md` de cada carpeta y prohíbe que `dominio/` importe React, Next, `app/`, `infraestructura/` o `process.env`, y que `infraestructura/` importe `app/`. Las cuatro comprobaciones se validaron con mutaciones reales (README ausente, carpeta sin declarar, carpeta declarada inexistente e importación prohibida) y la no-vacuidad del salto de línea con una prueba de regresión. `npm run test` (16 archivos, 110 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde.
 
-- [ ] **T-006 — Crear proveedores de prueba falsos para IA, QR, correo y tiempo.**
+- [x] **T-006 — Crear proveedores de prueba falsos para IA, QR, correo y tiempo.**
   - RF: RF-1, RF-6, RF-10; RNF: RNF-9, RNF-10.
   - Depende de: T-003, T-004.
   - Hecho cuando: las pruebas pueden ejecutar el dominio sin llamar a OpenAI, Supabase, SMTP ni servicios de QR reales.
+  - Verificado: `pruebas/dobles/` con `contrato.ts` (campos externos, tabla de traducción al vocabulario de dominio y puerto `Reloj`), `ia.ts` (12 escenarios: válido, clave repetida, ausente, adicional, valor inválido, respuesta vacía, JSON inválido, error HTTP, caída de red, advertencia ambigua, advertencia contradictoria e idioma no admitido), `qr.ts` (PNG válido incrustado, sin dependencia), `correo.ts` (registro con las dos plantillas) y `reloj.ts` (reloj virtual con `avanzar` y `dormir`). El doble de IA entrega texto crudo porque una clave repetida no sobrevive a `JSON.parse`. Habilita `CA-RF1-01` a `CA-RF1-10`, `CA-RF6-02` a `CA-RF6-08`, `CA-RF10-04`, `CE-1` a `CE-5`, `CE-21` y `CE-23`, con `RNF-9` (escenarios etiquetados por criterio) y `RNF-10` (dobles sin interfaz). La cobertura real llega en T-022, T-038 y T-047. El doble de repositorio de Supabase se difiere a T-011 a T-016, porque aún no existe el contrato de repositorio. No-vacuidad comprobada con tres mutaciones (escenario de clave repetida que no repite, reloj que resuelve antes de vencer y tabla de traducción incompleta). `npm run test` (21 archivos, 153 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde.
 
 ## Bloque 1 — Base de datos, migraciones y aislamiento
 
