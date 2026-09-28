@@ -47,26 +47,34 @@ app/
 dominio/
   alergenos/             Catálogo, valores, advertencias y reglas
   categorias/            Orden, visibilidad y eliminación
-  platos/              Estados, versión y validaciones
-  publicacion/           Elegibilidad, publicación y instantáneas
+  comun/                 Estados y tipos compartidos por platos y restaurantes
+  platos/              Versión, edición y transiciones de estado
+  publicacion/           Elegibilidad, publicación e instantáneas
   autenticacion/         Reglas de sesión y acceso
   validacion/            Contratos de entrada y salida
 
 infraestructura/
+  configuracion/         Lectura y validación de variables del servidor
   openai/                Adaptador de Structured Outputs
   qr/                    Generación de PNG
   correo/                Configuración de correo en español
   supabase/              Cliente, migraciones y políticas
 
 pruebas/
-  dominio/
-  integracion/
-  componentes/
-  e2e/
-  rendimiento/
+  fundacion/             Arnés, estructura, codificación y aislamiento
+  helpers/               Utilidades compartidas por las pruebas
+  tipos/                 Declaraciones de tipos de terceros
+  entorno/               Variables de entorno y secretos de servidor
+  dominio/               Reglas del dominio sin renderizar interfaz
+  integracion/           Adaptadores, base de datos y correo
+  componentes/           Componentes y accesibilidad, con sus fixtures
+  e2e/                   Flujos completos en el navegador
+  rendimiento/           Primer contenido visible con datos representativos
 ```
 
 El código de dominio no importará componentes visuales. Los adaptadores de OpenAI, QR, correo y Supabase implementarán interfaces definidas por el dominio.
+
+El árbol de arriba es la especificación de la estructura: `pruebas/fundacion/capas.test.ts` falla si una carpeta declarada no existe, si aparece una carpeta que el plan no declara o si `dominio/` o `infraestructura/` importan lo que les corresponde a otras capas. Las rutas de `app/` se crean en la tarea que las implemente. Cada carpeta de las tres capas lleva un `README.md` con su responsabilidad, para que quede documentada y git la registre.
 
 ## 4. Variables y configuración
 

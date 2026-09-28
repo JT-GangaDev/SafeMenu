@@ -37,10 +37,11 @@
   - Hecho cuando: existe una constante única con exactamente los 14 códigos y estados `borrador`, `verificación pendiente`, `confirmado`, `oculto`, `no publicado` y `publicado`.
   - Verificado: `dominio/alergenos/catalogo.ts` (14 códigos, etiquetas, valores `presente`/`ausente` y aviso de ausencia sin certificación), `dominio/comun/estados.ts` (los seis estados y su código interno) y `dominio/alergenos/errores.ts` (10 errores con mensaje en español y `reintentable`). `npm run test` (15 archivos, 99 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde.
 
-- [ ] **T-005 — Crear la estructura de dominio, infraestructura y pruebas.**
+- [x] **T-005 — Crear la estructura de dominio, infraestructura y pruebas.**
   - RF: transversal (soporta RF-1–RF-12); RNF: RNF-10.
   - Depende de: T-001.
   - Hecho cuando: el dominio no importa componentes visuales y las carpetas de `dominio`, `infraestructura` y `pruebas` están creadas.
+  - Verificado: 21 carpetas declaradas en `docs/plan.md` §3 y existentes en disco, cada una con su `README.md` en español. `pruebas/fundacion/capas.test.ts` (11 pruebas) compara el árbol del plan con el disco en ambos sentidos, exige el `README.md` de cada carpeta y prohíbe que `dominio/` importe React, Next, `app/`, `infraestructura/` o `process.env`, y que `infraestructura/` importe `app/`. Las cuatro comprobaciones se validaron con mutaciones reales (README ausente, carpeta sin declarar, carpeta declarada inexistente e importación prohibida) y la no-vacuidad del salto de línea con una prueba de regresión. `npm run test` (16 archivos, 110 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde.
 
 - [ ] **T-006 — Crear proveedores de prueba falsos para IA, QR, correo y tiempo.**
   - RF: RF-1, RF-6, RF-10; RNF: RNF-9, RNF-10.

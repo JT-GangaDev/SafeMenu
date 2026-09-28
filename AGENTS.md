@@ -79,6 +79,21 @@ pruebas/        Pruebas de dominio, integración, componentes y E2E
 - `pruebas/fundacion/aislamiento.test.ts` escanea `dominio/**` y falla ante
   `react`, `react-dom`, `next/*`, `@/app/*` o `process.env`.
 
+## Estructura vigilada (T-005)
+
+- El árbol de `docs/plan.md` §3 es la especificación de la estructura:
+  `pruebas/fundacion/capas.test.ts` falla si una carpeta declarada no existe, si
+  hay una carpeta que el plan no declara, si falta el `README.md` de una carpeta
+  o si `dominio/` o `infraestructura/` importan lo que les corresponde a otras
+  capas.
+- Las 21 carpetas de `dominio/`, `infraestructura/` y `pruebas/` llevan un
+  `README.md` en español con su responsabilidad. Es lo que permite versionar
+  carpetas que aún no tienen archivos.
+- Las rutas de `app/` no se adelantan: cada una se crea en la tarea que la
+  implemente. `dominio/` no importa `infraestructura/`, y este no importa `app/`.
+- Al crear una carpeta, declara antes su responsabilidad en `docs/plan.md` §3 y
+  después añade su `README.md`; el plan y el disco se vigilan en ambos sentidos.
+
 ## Vocabulario del dominio (T-004)
 
 - No dupliques los 14 alérgenos, los estados ni los mensajes de error: la fuente
