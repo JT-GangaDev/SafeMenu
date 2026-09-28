@@ -11,6 +11,8 @@ archivo, del código y de los mensajes visibles está en español.
 - `npm run typecheck`: comprobación de tipos sin emitir archivos.
 - `npm run test`: pruebas de forma no interactiva (Vitest).
 - `npm run test:watch`: pruebas en modo continuo.
+- `npm run test:e2e`: pruebas de extremo a extremo (Playwright). Compila y
+  arranca la aplicación antes de ejecutarlas.
 - `npm run env:check`: valida `.env.local` y `.env` e informa en español de lo
   que falta, sin mostrar valores.
 
@@ -34,8 +36,8 @@ archivo, del código y de los mensajes visibles está en español.
 4. Solo se persisten resultados validados contra los 14 alérgenos.
 5. Los mensajes visibles y la documentación están en español. Los campos
    externos de OpenAI se aíslan y traducen en la frontera.
-6. Ejecuta `npm run test`, `npm run lint` y `npm run typecheck` antes de dar por
-   terminada una tarea.
+6. Ejecuta `npm run test`, `npm run test:e2e`, `npm run lint` y
+   `npm run typecheck` antes de dar por terminada una tarea.
 7. Los archivos de entorno reales (`.env.local`, `.env`) no se versionan ni se
    muestran en registros.
 8. Marca la tarea en `docs/task.md` solo cuando su apartado «Hecho cuando» se
@@ -49,3 +51,28 @@ dominio/        Reglas de alérgenos, categorías, platos y publicación
 infraestructura/ Adaptadores de OpenAI, QR, correo y Supabase
 pruebas/        Pruebas de dominio, integración, componentes y E2E
 ```
+
+## Arnés de pruebas (T-003)
+
+- Vitest usa dos proyectos en `vitest.config.ts`: `dominio` (entorno `node`,
+  `pruebas/**/*.test.ts`) y `componentes` (entorno `jsdom`,
+  `pruebas/**/*.test.tsx` con `pruebas/componentes/preparacion.ts`).
+- No añadas `@vitejs/plugin-react`: el JSX se compila con
+  `esbuild: { jsx: "automatic" }` en la raíz de `vitest.config.ts`.
+- Sin `globals: true`, así que la limpieza del DOM se registra a mano con
+  `afterEach(cleanup)` en `pruebas/componentes/preparacion.ts`.
+- `jest-axe` no incluye tipos y `@types/jest-axe` arrastra `@types/jest`, que
+  choca con Vitest. Los tipos están en `pruebas/tipos/axe.d.ts` (declaración
+  ambiental) y `pruebas/tipos/matchers.d.ts` (aumento de `Assertion`).
+- `jest-axe` exporta `toHaveNoViolations` como objeto de matchers, así que se
+  registra con `expect.extend(toHaveNoViolations)`.
+- Playwright usa `pruebas/e2e/**/*.spec.ts`, compila y arranca la aplicación con
+  `npm run build && npm run start`, y no reutiliza el servidor si hay `CI`.
+- Las pruebas E2E necesitan el Chromium de Playwright
+  (`npx playwright install chromium`). Si no se puede descargar, usa el
+  navegador del sistema con `$env:PLAYWRIGHT_CHANNEL="chrome"; npm run test:e2e`
+  en PowerShell o `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` en bash.
+- `pruebas/fundacion/codificacion.test.ts` falla si algún archivo de `app/`,
+  `dominio/` o `infraestructura/` se guarda dos veces como UTF-8. No escribas
+  texto corrupto ni lo compiles en los archivos: el texto en español va en
+  UTF-8.

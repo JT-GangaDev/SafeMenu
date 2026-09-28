@@ -365,6 +365,14 @@ Playwright cubrirá los flujos de todos los `CA`:
 - edición concurrente, fallo de IA y restauración;
 - ausencia de conexión y error de carga.
 
+Las pruebas viven en `pruebas/e2e/**/*.spec.ts` y arrancan la aplicación ya
+compilada (`npm run build && npm run start`) contra `http://localhost:3000`. El
+navegador por defecto es el Chromium de Playwright; si el equipo no puede
+descargarlo, `PLAYWRIGHT_CHANNEL=chrome` o `edge` reutiliza el navegador del
+sistema sin cambiar la configuración versionada. Vitest se organiza en dos
+proyectos, `dominio` y `componentes`, para poder comprobar las reglas sin
+renderizar interfaz. **RNF-9, RNF-10**.
+
 ### 9.6 Pruebas no funcionales
 
 - Rendimiento: 100 platos, 10 categorías, 4G estable y primer contenido visible en menos de 3 segundos en percentil 95 de 100 ejecuciones. **RNF-6**.

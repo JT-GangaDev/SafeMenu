@@ -9,11 +9,18 @@ describe("dependencias mínimas (constitución 1)", () => {
   const dependenciasPermitidas = ["next", "react", "react-dom"];
 
   const herramientasDePruebaPermitidas = [
+    "@playwright/test",
+    "@axe-core/playwright",
+    "@testing-library/jest-dom",
+    "@testing-library/react",
+    "@testing-library/user-event",
     "@types/node",
     "@types/react",
     "@types/react-dom",
     "eslint",
     "eslint-config-next",
+    "jest-axe",
+    "jsdom",
     "typescript",
     "vitest",
   ];
@@ -54,6 +61,15 @@ describe("dependencias mínimas (constitución 1)", () => {
       devDependencies[herramienta],
     );
     expect(Object.keys(devDependencies).sort()).toEqual(permitidas.sort());
+  });
+
+  it("no mueve las herramientas de pruebas a dependencias de producción", () => {
+    for (const herramienta of herramientasDePruebaPermitidas) {
+      expect(
+        Object.keys(dependencies),
+        `${herramienta} debe ser dependencia de desarrollo`,
+      ).not.toContain(herramienta);
+    }
   });
 
   it("mantiene el proyecto privado y sin versión publicable", () => {

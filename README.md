@@ -18,9 +18,20 @@ Menús con alérgenos detectados por IA y publicados mediante un código QR.
 | `npm run start` | Sirve la compilación de producción. |
 | `npm run lint` | Ejecuta ESLint sobre el proyecto. |
 | `npm run typecheck` | Comprueba los tipos con TypeScript sin emitir archivos. |
-| `npm run test` | Ejecuta las pruebas de forma no interactiva. |
+| `npm run test` | Ejecuta las pruebas de dominio y de componentes con Vitest. |
 | `npm run test:watch` | Ejecuta las pruebas en modo continuo. |
+| `npm run test:e2e` | Ejecuta las pruebas de extremo a extremo con Playwright. |
 | `npm run env:check` | Valida las variables de entorno configuradas. |
+
+## Pruebas
+
+- `npm run test` usa dos proyectos de Vitest: `dominio` (Node) y `componentes`
+  (jsdom con Testing Library).
+- `npm run test:e2e` compila la aplicación, la arranca con `npm run start` y
+  comprueba la portada con Playwright y axe. Necesita el Chromium de Playwright
+  (`npx playwright install chromium`); si no se puede descargar, ejecuta
+  `$env:PLAYWRIGHT_CHANNEL="chrome"; npm run test:e2e` en PowerShell o
+  `PLAYWRIGHT_CHANNEL=chrome npm run test:e2e` en bash.
 
 ## Variables de entorno
 

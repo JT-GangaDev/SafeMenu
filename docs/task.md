@@ -25,10 +25,11 @@
   - Depende de: T-001.
   - Hecho cuando: existe `.env.example`, la aplicación valida las variables requeridas y ninguna clave de OpenAI o Supabase queda expuesta al cliente.
 
-- [ ] **T-003 — Configurar Vitest, Testing Library, Playwright y las comprobaciones de accesibilidad.**
+- [x] **T-003 — Configurar Vitest, Testing Library, Playwright y las comprobaciones de accesibilidad.**
   - RF: transversal (soporta RF-1–RF-12); RNF: RNF-5, RNF-9, RNF-10.
   - Depende de: T-001.
   - Hecho cuando: las pruebas unitarias, de componentes y E2E se ejecutan mediante comandos documentados.
+  - Verificado: `npm run test` (12 archivos, 72 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde. Comandos en `README.md` y detalles del arnés en `AGENTS.md`.
 
 - [ ] **T-004 — Definir el catálogo de 14 alérgenos, estados y errores en español.**
   - RF: RF-6, RF-7, RF-12; RNF: RNF-1, RNF-4.

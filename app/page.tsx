@@ -6,12 +6,12 @@ export default function Home() {
       <main className={styles.main}>
         <h1>SafeMenu</h1>
         <p>
-          MenÃºs con alÃ©rgenos detectados automÃ¡ticamente y publicados mediante un
-          cÃ³digo QR.
+          Menús con alérgenos detectados automáticamente y publicados mediante un
+          código QR.
         </p>
         <p className={styles.estado}>
-          FundaciÃ³n del proyecto iniciada. El panel del restaurante y el menÃº
-          pÃºblico se construirÃ¡n en las siguientes tareas.
+          Fundación del proyecto iniciada. El panel del restaurante y el menú
+          público se construirán en las siguientes tareas.
         </p>
       </main>
     </div>

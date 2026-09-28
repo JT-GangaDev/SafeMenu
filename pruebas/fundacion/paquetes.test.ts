@@ -28,9 +28,13 @@ describe("scripts de npm", () => {
     expect(scripts.lint).not.toContain("next lint");
   });
 
-  it("ejecuta las pruebas de forma no interactiva", () => {
+  it("ejecuta las pruebas unitarias y de componentes de forma no interactiva", () => {
     expect(scripts.test).toContain("vitest");
     expect(scripts.test).toContain("run");
+  });
+
+  it("ejecuta las pruebas de extremo a extremo con Playwright", () => {
+    expect(scripts["test:e2e"]).toBe("playwright test");
   });
 
   it("comprueba los tipos sin emitir archivos", () => {
