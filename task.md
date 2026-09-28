@@ -15,7 +15,7 @@
 
 ## Bloque 0 — Fundación
 
-- [ ] **T-001 — Inicializar la aplicación Next.js con App Router y TypeScript.**
+- [x] **T-001 — Inicializar la aplicación Next.js con App Router y TypeScript.**
   - RF: transversal (soporta RF-1–RF-12); RNF: RNF-4, RNF-9, RNF-10.
   - Depende de: —
   - Hecho cuando: el proyecto arranca con `npm run dev` y existe un script de compilación, lint y pruebas.
