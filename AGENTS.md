@@ -11,11 +11,23 @@ archivo, del código y de los mensajes visibles está en español.
 - `npm run typecheck`: comprobación de tipos sin emitir archivos.
 - `npm run test`: pruebas de forma no interactiva (Vitest).
 - `npm run test:watch`: pruebas en modo continuo.
+- `npm run env:check`: valida `.env.local` y `.env` e informa en español de lo
+  que falta, sin mostrar valores.
+
+## Variables de entorno
+
+- Lee el entorno con `obtenerConfiguracion()` de
+  `infraestructura/configuracion/entorno.ts`. No uses `process.env` en otro sitio:
+  una prueba lo comprueba (`pruebas/entorno/secretos.test.ts`).
+- `variablesPublicas()` es la única vía para obtener `NEXT_PUBLIC_URL` en el
+  cliente. `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY` y `SMTP_PASSWORD` nunca
+  salen del servidor.
+- Copia `.env.example` a `.env.local` para trabajar en local.
 
 ## Reglas obligatorias
 
 1. No añadas dependencias, servicios ni capas sin una necesidad documentada en
-   `plan.md` §2.
+   `docs/plan.md` §2.
 2. El código de `dominio/` y `infraestructura/` no importa componentes visuales
    ni APIs de Next.js.
 3. Antes de implementar, escribe las pruebas de éxito, error y límite.
@@ -24,7 +36,9 @@ archivo, del código y de los mensajes visibles está en español.
    externos de OpenAI se aíslan y traducen en la frontera.
 6. Ejecuta `npm run test`, `npm run lint` y `npm run typecheck` antes de dar por
    terminada una tarea.
-7. Marca la tarea en `task.md` solo cuando su apartado «Hecho cuando» se
+7. Los archivos de entorno reales (`.env.local`, `.env`) no se versionan ni se
+   muestran en registros.
+8. Marca la tarea en `docs/task.md` solo cuando su apartado «Hecho cuando» se
    cumple, e indica los identificadores `RF`, `CA`, `CE` y `RNF` cubiertos.
 
 ## Estructura prevista

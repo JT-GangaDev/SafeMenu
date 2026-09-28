@@ -20,7 +20,7 @@
   - Depende de: —
   - Hecho cuando: el proyecto arranca con `npm run dev` y existe un script de compilación, lint y pruebas.
 
-- [ ] **T-002 — Configurar las variables de entorno y los secretos de servidor.**
+- [x] **T-002 — Configurar las variables de entorno y los secretos de servidor.**
   - RF: transversal (soporta RF-1–RF-12); RNF: RNF-2, RNF-4.
   - Depende de: T-001.
   - Hecho cuando: existe `.env.example`, la aplicación valida las variables requeridas y ninguna clave de OpenAI o Supabase queda expuesta al cliente.
