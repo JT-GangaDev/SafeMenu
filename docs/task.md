@@ -31,10 +31,11 @@
   - Hecho cuando: las pruebas unitarias, de componentes y E2E se ejecutan mediante comandos documentados.
   - Verificado: `npm run test` (12 archivos, 72 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde. Comandos en `README.md` y detalles del arnés en `AGENTS.md`.
 
-- [ ] **T-004 — Definir el catálogo de 14 alérgenos, estados y errores en español.**
+- [x] **T-004 — Definir el catálogo de 14 alérgenos, estados y errores en español.**
   - RF: RF-6, RF-7, RF-12; RNF: RNF-1, RNF-4.
   - Depende de: T-001.
   - Hecho cuando: existe una constante única con exactamente los 14 códigos y estados `borrador`, `verificación pendiente`, `confirmado`, `oculto`, `no publicado` y `publicado`.
+  - Verificado: `dominio/alergenos/catalogo.ts` (14 códigos, etiquetas, valores `presente`/`ausente` y aviso de ausencia sin certificación), `dominio/comun/estados.ts` (los seis estados y su código interno) y `dominio/alergenos/errores.ts` (10 errores con mensaje en español y `reintentable`). `npm run test` (15 archivos, 99 pruebas), `npm run test:e2e` (2 pruebas), `npm run lint`, `npm run typecheck` y `npm run build` en verde.
 
 - [ ] **T-005 — Crear la estructura de dominio, infraestructura y pruebas.**
   - RF: transversal (soporta RF-1–RF-12); RNF: RNF-10.

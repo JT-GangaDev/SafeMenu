@@ -164,6 +164,8 @@ Los códigos de dominio serán:
 
 Una respuesta con una clave repetida, ausente o adicional, o con un valor que no sea `presente` o `ausente`, se rechazará completa. Las advertencias no se guardarán como resultado final publicable.
 
+La única fuente de verdad de este vocabulario es `dominio/alergenos/catalogo.ts`: los códigos, sus etiquetas en español y los valores `presente` y `ausente`. Los estados de plato y restaurante, con su código interno sin espacios ni tildes para la base de datos, están en `dominio/comun/estados.ts`. Los errores de análisis, revisión y confirmación, con su mensaje en español, están en `dominio/alergenos/errores.ts`.
+
 ### `publicaciones` — RF-8, RF-9, RF-10, RF-11
 
 - `id`, `restaurante_id` y `version`.

@@ -76,3 +76,18 @@ pruebas/        Pruebas de dominio, integración, componentes y E2E
   `dominio/` o `infraestructura/` se guarda dos veces como UTF-8. No escribas
   texto corrupto ni lo compiles en los archivos: el texto en español va en
   UTF-8.
+- `pruebas/fundacion/aislamiento.test.ts` escanea `dominio/**` y falla ante
+  `react`, `react-dom`, `next/*`, `@/app/*` o `process.env`.
+
+## Vocabulario del dominio (T-004)
+
+- No dupliques los 14 alérgenos, los estados ni los mensajes de error: la fuente
+  única es `dominio/alergenos/catalogo.ts` (códigos, etiquetas y valores
+  `presente`/`ausente`), `dominio/comun/estados.ts` (los seis estados y su
+  código interno) y `dominio/alergenos/errores.ts` (errores de análisis,
+  revisión y confirmación).
+- Los códigos van en minúsculas y sin tildes porque son clave de base de datos y
+  de traducción; las etiquetas y los mensajes van con tildes porque se muestran.
+- `pruebas/dominio/alergenos/catalogo.test.ts` extrae la lista de
+  `docs/plan.md` §5 y la compara con el catálogo, así que cualquier cambio
+  debe hacerse también en el plan.
